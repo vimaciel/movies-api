@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const { Movie, validateMovie } = require('../models/movie')
-const { getValidGenresAsync } = require('../models/genre')
 const successResponse = require('../resources/success-response')
 const errorResponse = require('../resources/error-response')
 const validateBody = require('../middlewares/validateBody')
@@ -12,9 +11,7 @@ router.get('/', (_, res) => {
 })
 
 router.post('/', validateBody(validateMovie), async (req, res) => {
-    const { title, genre: genreItens, releaseDate, actors, summarizedPlot, youtubeTrailer, posterUrlImage } = req.body
-    const genre = await getValidGenresAsync(genreItens)
-    console.log(genres);
+    const { title, genre, releaseDate, actors, summarizedPlot, youtubeTrailer, posterUrlImage } = req.body
 
     const movie = new Movie({
         title,
