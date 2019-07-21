@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const validateBody = require('../middlewares/validateBody')
+const validateBody = require('../middlewares/validate-body')
 const { validateGenre, Genre } = require('../models/genre')
 const successResponse = require('../resources/success-response')
 

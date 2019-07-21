@@ -3,7 +3,7 @@ const router = express.Router()
 const { Movie, validateMovie } = require('../models/movie')
 const successResponse = require('../resources/success-response')
 const errorResponse = require('../resources/error-response')
-const validateBody = require('../middlewares/validateBody')
+const validateBody = require('../middlewares/validate-body')
 const { getGenreAsync } = require('../models/genre')
 
 router.get('/', (_, res) => {

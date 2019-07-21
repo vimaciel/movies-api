@@ -4,7 +4,7 @@ const Join = require('joi')
 const { User } = require('../models/user')
 const successResponse = require('../resources/success-response')
 const errorResponse = require('../resources/error-response')
-const validateBody = require('../middlewares/validateBody')
+const validateBody = require('../middlewares/validate-body')
 const cryptoHelper = require('../helpers/crypto-helper')
 
 router.post('/', validateBody(validateAuth), async (req, res) => {
