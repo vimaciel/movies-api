@@ -60,6 +60,17 @@ router.put('/:id', [validObjectId, validateBody(validateMovie)], async (req, res
     }
 })
 
+router.delete('/:id', [validObjectId], async (req, res) => {
+    let movie = await Movie.findById(req.params.id)
+
+    if (!movie) {
+        return res.status(404).send(errorResponse(['Movie not found']))
+    }
+
+    await Movie.deleteOne(req.param.id);
+    return res.send(successResponse(movie));
+})
+
 async function validateGenreItemsAsync(items, res) {
     return getGenreAsync(items)
         .then(genre => genre)
