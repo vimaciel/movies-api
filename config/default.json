@@ -1,4 +1,4 @@
 {
-    "privateKey": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "jwtPrivateKey": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
     "database-connection": "mongodb://localhost/movie-api"
 }

@@ -1,4 +1,5 @@
 const { genreSchema } = require('./genre')
+const { userSchema } = require('./user')
 const mongoose = require('mongoose')
 const Joi = require('joi')
 Joi.objectId = require('joi-objectid')(Joi);
@@ -24,6 +25,13 @@ const movieSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    userAdmin: {
+        type: userSchema,
+        required: true
+    },
+    colaborators: {
+        type: [userSchema]
+    },
     youtubeTrailer: String,
     posterUrlImage: String
 })
@@ -35,12 +43,13 @@ function validateMovie(req) {
         releaseDate: Joi.date().required(),
         actors: Joi.array().items(Joi.string().required()),
         summarizedPlot: Joi.string().required(),
+        colaborators: Joi.array().items(Joi.objectId()),
         youtubeTrailer: Joi.string(),
         posterUrlImage: Joi.string()
     }
 
     return Joi.validate(req, schema, { abortEarly: true })
-}   
+}
 
 const Movie = mongoose.model('movies', movieSchema)
 

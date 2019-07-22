@@ -3,6 +3,7 @@ const router = express.Router()
 const validateBody = require('../middlewares/validate-body')
 const { validateGenre, Genre } = require('../models/genre')
 const successResponse = require('../resources/success-response')
+const auth = require('../middlewares/auth')
 
 router.get('/:search', async (req, res) => {
     const { search } = req.params
@@ -11,7 +12,7 @@ router.get('/:search', async (req, res) => {
     res.status(200).send(successResponse(genres))
 })
 
-router.post('/', validateBody(validateGenre), async (req, res) => {
+router.post('/', [auth, validateBody(validateGenre)], async (req, res) => {
     const { name } = req.body
     let genre = await Genre.findOne({ name: { $eq: name.toLowerCase() } })
 

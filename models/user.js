@@ -19,9 +19,23 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.methods.generateAuthToken = function () {
-    return jwt.sign({ _id: this._id }, config.get('privateKey'))
+    return jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'))
 }
 
 const User = mongoose.model('users', userSchema)
 
+function getUsersAsync(users) {
+    return Promise.all(users.map(async id => {
+        const user = await User.findById(id, { __v: false, password: false })
+
+        if (!user) {
+            throw new Error(`User '${id}' not found`)
+        }
+
+        return user
+    }))
+}
+
 module.exports.User = User
+module.exports.userSchema = userSchema
+module.exports.getUsersAsync = getUsersAsync

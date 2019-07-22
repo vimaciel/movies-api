@@ -12,6 +12,15 @@ mongoose.connect(databaseConnection, { useNewUrlParser: true, useCreateIndex: tr
             email: 'viniciusfmaciel@gmail.com',
             password: await crypto.hash('passwordtest') 
         })
+
+        createNewUser({
+            name: 'Test User',
+            email: 'testuser@gmail.com',
+            password: await crypto.hash('passwordtest') 
+        })
+
+        console.log('Initial seeds were inserted on database')
+        process.exit()
     })
 
 function createNewUser(data) {
