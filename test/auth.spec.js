@@ -19,7 +19,7 @@ describe('Auth route', () => {
         expect(data.token).is.not.empty
     })
 
-    it('Test when user not found', async () => {
+    it('Test when user doesnt exist', async () => {
         const res = await request(app)
             .post('/auth')
             .send({
@@ -33,17 +33,17 @@ describe('Auth route', () => {
         expect(body).to.deep.equal(errorResponse(['E-mail or password is wrong']))
     })
 
-    // it('Test when user not found', async () => {
-    //     const res = await request(app)
-    //         .post('/auth')
-    //         .send({
-    //             email: 'viniciusfmaciel@gmail.com',
-    //             password: 'wrongpassword'               
-    //         })
-    //         .set('Content-Type', 'application/json')
+    it('Test when user not found', async () => {
+        const res = await request(app)
+            .post('/auth')
+            .send({
+                email: 'viniciusfmaciel@gmail.com',
+                password: 'wrongpassword'
+            })
+            .set('Content-Type', 'application/json')
 
-    //     const { status, body } = res
-    //     expect(status).to.eq(400)
-    //     expect(body).to.deep.equal(errorResponse(['E-mail or password is wrong']))
-    // })
+        const { status, body } = res
+        expect(status).to.eq(400)
+        expect(body).to.deep.equal(errorResponse(['E-mail or password is wrong']))
+    })
 })
