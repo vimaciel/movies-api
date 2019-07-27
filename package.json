@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha"
+    "test": "mocha",
+    "coverage": "nyc npm run test"
   },
   "author": "",
   "license": "ISC",
@@ -12,15 +13,16 @@
     "bcryptjs": "^2.4.3",
     "chai": "^4.2.0",
     "chai-spies": "^1.0.0",
-    "config": "^3.2.0",
+    "config": "^3.2.2",
     "express": "^4.17.1",
     "joi": "^14.3.1",
     "joi-objectid": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.0",
-    "mongoose": "^5.6.4",
+    "mongoose": "^5.6.7",
     "nodemon": "^1.19.1",
     "nyc": "^14.1.1",
-    "sinon": "^7.3.2"
+    "sinon": "^7.3.2",
+    "supertest": "^4.0.2"
   }
 }

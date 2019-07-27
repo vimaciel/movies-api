@@ -20,28 +20,34 @@ describe('Auth middleware', function () {
         send: function () { }
     }    
 
-    const reqHeaderStub = sinon.stub(req, 'header')
+    const header = sinon.stub(req, 'header')
+    const status = sinon.stub(res, 'status').returnsThis()
+    const send = sinon.stub(res, 'send')
 
     it('Test if user is allowed to go forward', () => {
         const next = sinon.spy()
-        reqHeaderStub.returns(fakeUser.generateAuthToken())
+        header.returns(fakeUser.generateAuthToken())
 
         auth(req, {}, next)
-        expect(reqHeaderStub.called).to.be.true
+        expect(header.called).to.be.true
         expect(req.user).to.be.an('object')
         expect(req.user).to.have.property('_id')
         expect(next.called).to.be.true
     })
 
     it('Test when user has a access denied', () => {
-        reqHeaderStub.returns(null)
-        
-        const mock = sinon.mock(res)        
-        mock.expects('status').returnsThis().withArgs(401)
-        mock.expects('send').once().withExactArgs(errorResponse(['Access denied']))
+        header.returns(null)
+        auth(req, res)       
 
+        sinon.assert.calledWith(status, 401)
+        sinon.assert.calledWith(send, errorResponse(['Access denied']))
+    })
+
+    it('Test when the token verification fails', () => {
+        header.returns('invalidtoken')
         auth(req, res)
-        mock.verify()
-        expect(reqHeaderStub.called).to.be.true
+
+        sinon.assert.calledWith(status, 400)
+        sinon.assert.calledWith(send, errorResponse(['Invalid token']))
     })
 })
