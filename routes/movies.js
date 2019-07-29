@@ -9,8 +9,8 @@ const { getGenreAsync } = require('../models/genre')
 const validObjectId = require('../middlewares/validate-object-id')
 const auth = require('../middlewares/auth')
 
-router.get('/', (_, res) => {
-    const movies = Movie.find().sort('title')
+router.get('/', async (_, res) => {
+    const movies = await Movie.find().sort('title')
     res.status(200).send(successResponse(movies))
 })
 
@@ -40,7 +40,7 @@ router.post('/', [auth, validateBody(validateMovie)], async (req, res) => {
 
         await movie.save()
 
-        res.status(400).send(errorResponse(movie))
+        res.status(200).send(successResponse(movie))
     }
 })
 
@@ -78,18 +78,18 @@ router.put('/:id', [auth, validObjectId, validateBody(validateMovie)], async (re
 })
 
 router.delete('/:id', [auth, validObjectId], async (req, res) => {
-    let movie = await Movie.findById(req.params.id)
+    const movie = await Movie.findById(req.params.id)
 
     if (!movie) {
         return res.status(404).send(errorResponse(['Movie not found']))
     }
 
-    if (movie.userAdmin._id !== req.user._id) {
+    if (movie.userAdmin._id.toString() !== req.user._id) {
         return res.status(401).send(errorResponse(['Access denied']))
     }
 
     await Movie.deleteOne(req.param.id)
-    return res.send(successResponse(movie))
+    return res.status(200).send(successResponse(movie))
 })
 
 async function validateGenreItemsAsync(items, res) {
@@ -116,7 +116,7 @@ async function validateColaboratorsAsync(users, res) {
 }
 
 async function hasUserAccessPermission(user, colaborators) {
-    if (colaborators) {
+    if (!colaborators) {
         return false
     }
 

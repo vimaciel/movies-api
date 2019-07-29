@@ -27,14 +27,15 @@ const movieSchema = new mongoose.Schema({
     },
     userAdmin: {
         type: userSchema,
-        required: true
+        required: true,
+        unique: false
     },
     colaborators: {
         type: [userSchema]
     },
     youtubeTrailer: String,
     posterUrlImage: String
-})
+}, { autoIndex: false })
 
 function validateMovie(req) {
     const schema = {
