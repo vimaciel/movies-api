@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 15000",
     "coverage": "nyc npm run test"
   },
   "author": "",
@@ -15,6 +15,7 @@
     "chai-spies": "^1.0.0",
     "config": "^3.2.2",
     "express": "^4.17.1",
+    "faker": "^4.1.0",
     "joi": "^14.3.1",
     "joi-objectid": "^2.0.0",
     "jsonwebtoken": "^8.5.1",

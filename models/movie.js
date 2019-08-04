@@ -37,6 +37,31 @@ const movieSchema = new mongoose.Schema({
     posterUrlImage: String
 }, { autoIndex: false })
 
+movieSchema.methods.hasUserPermissionToAction = async function (user, action = 'update') {
+    if (this.userAdmin._id.toString() !== user._id.toString()) {
+        return false
+    }
+
+    /*
+        At this point, the user is the administrator of the movie. 
+        Said that, when the action deletes a movie, only the administrator has permission 
+        to do that.    
+    */
+    if (action == 'delete') {
+        return true
+    }
+
+    /*
+        User administrator and users in collaborators have permission to update the content of the movie. 
+        Otherwise, it's not allowed.
+    */   
+    const userInCollaborators = 
+        this.colaborators !== null 
+        && await this.colaborators.find(colab => colab._id.toString() === user._id)
+
+    return userInCollaborators !== null
+}
+
 function validateMovie(req) {
     const schema = {
         title: Joi.string().required(),

@@ -1,6 +1,6 @@
 const request = require('supertest')
 const app = require('../index')
-const { expect } = require('chai')
+const { expect, assert } = require('chai')
 const errorResponse = require('../resources/error-response')
 
 describe('Auth route', () => {
@@ -15,11 +15,11 @@ describe('Auth route', () => {
 
         const { status, body } = res
         const { data } = body
-        expect(status).to.eq(200)
+        assert(status, 200)
         expect(data.token).is.not.empty
     })
 
-    it('Test when user doesnt exist', async () => {
+    it("Test when user doesn't exist", async () => {
         const res = await request(app)
             .post('/auth')
             .send({
@@ -29,7 +29,7 @@ describe('Auth route', () => {
             .set('Content-Type', 'application/json')
 
         const { status, body } = res
-        expect(status).to.eq(400)
+        assert(status, 400)
         expect(body).to.deep.equal(errorResponse(['E-mail or password is wrong']))
     })
 
@@ -43,7 +43,7 @@ describe('Auth route', () => {
             .set('Content-Type', 'application/json')
 
         const { status, body } = res
-        expect(status).to.eq(400)
+        assert(status, 400)
         expect(body).to.deep.equal(errorResponse(['E-mail or password is wrong']))
     })
 })

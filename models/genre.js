@@ -22,8 +22,7 @@ function getGenreAsync(items) {
     return Promise.all(items.map(async id => {
         const genre = await Genre.findById(id, { __v: false })
 
-        if (!genre) {
-            console.log(`Genre '${id}' not found`)
+        if (!genre) {            
             throw new Error(`Genre '${id}' not found`)
         }
 

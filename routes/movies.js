@@ -51,8 +51,9 @@ router.put('/:id', [auth, validObjectId, validateBody(validateMovie)], async (re
         return res.status(404).send(errorResponse(['Movie not found']))
     }
 
-    if (movie.userAdmin._id.toString() !== req.user._id ||
-        await !hasUserAccessPermission(req.user, movie.colaborators)) {
+    const hasPermission = await movie.hasUserPermissionToAction(req.user)
+
+    if (!hasPermission) {
         return res.status(401).send(errorResponse(['Access denied']))
     }
 
@@ -84,7 +85,9 @@ router.delete('/:id', [auth, validObjectId], async (req, res) => {
         return res.status(404).send(errorResponse(['Movie not found']))
     }
 
-    if (movie.userAdmin._id.toString() !== req.user._id) {
+    const hasPermission = await movie.hasUserPermissionToAction(req.user, 'delete')
+
+    if (!hasPermission) {
         return res.status(401).send(errorResponse(['Access denied']))
     }
 
@@ -113,14 +116,6 @@ async function validateColaboratorsAsync(users, res) {
             res.status(404).send(errorResponse([message]))
             return [null, false]
         })
-}
-
-async function hasUserAccessPermission(user, colaborators) {
-    if (!colaborators) {
-        return false
-    }
-
-    return await colaborators.find(colab => colab._id.toString() === user._id)
 }
 
 module.exports = router
